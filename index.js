@@ -24,8 +24,12 @@ const app = express();
 app.use(cors());
 app.use(morgan("[:date] :method :url :status - :response-time ms"));
 
-app.get("/fetch/:id", (req, res) => {
-  const id = req.params.id;
+app.get("/", (req, res) => {
+  const id = req.query.customer;
+
+  if (!id) {
+    return res.status(400).send("Customer ID is required.");
+  }
 
   amqp.connect(RMQSTRING, function (error0, connection) {
     if (error0) {
